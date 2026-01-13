@@ -6,9 +6,9 @@ import { getSession } from "@/lib/auth"
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { jobId: string } }
+  context: { params: Promise<{ jobId: string }> }
 ) {
-  const { jobId } = context.params
+  const { jobId } = await context.params
 
   try {
     const session = await getSession()
@@ -19,8 +19,6 @@ export async function PATCH(
         { status: 401 }
       )
     }
-
-    const { jobId } = context.params
 
     const job = await db
       .select()
