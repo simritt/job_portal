@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Job Portal – Full Stack Web Application**
 
-## Getting Started
+A modern full-stack Job Portal that supports role-based workflows for Applicants and Recruiters.
+Built with a scalable backend, clean UI, and secure APIs.
 
-First, run the development server:
+🛠️**Tech Stack**
+1.	Next.js (App Router)
+2.	TypeScript
+3.	PostgreSQL (Neon)
+4.	Drizzle ORM
+5.	Session-based Authentication
+6.	Tailwind CSS
+7.	shadcn/ui
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+👤**Applicant Features**
+1.	Browse available job listings
+2.	Save and unsave jobs
+3.	Apply to jobs with resume selection or upload
+4.	Withdraw job applications
+5.	Track application status
+6.	Dedicated applicant dashboard
+7.	Upload resumes and select a default one
+8.	Add and manage skills in profile
+9.	Toast notifications, skeleton loaders, and empty states
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🧑‍💼**Recruiter Features**
+1.	Create and manage job listings
+2.	Publish, unpublish or keep jobs as draft 
+3.	Edit jobs after publishing
+4.	View applicants per job
+5.	Filter applicants
+6.	Search applicants by name, email or skills
+7.	Update application status
+8.	Save and unsave applicants
+9.	Recruiter dashboard with loading and empty states
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+✨**Key Highlights**
+1.	Role-based dashboards (Applicant and Recruiter)
+2.	Profile editing with completion status and suggestions
+3.	Persistent theme preference across logins
+4.	Secure and structured API routes
+5.	Duplicate application prevention
+6.	Clean UX with skeleton loaders, toasts, and empty states
+7.	Database migrations and seeding using Drizzle ORM
+8.	Scalable and normalized schema design
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🔮**Future Features**
+1.	ML-based applicant–job matching
+2.	Real-time chat between Applicant and Recruiter
+3.	Job application notifications
+4.	Forgot password/OTP-based authentication
+5.	Advanced analytics dashboard
 
-## Learn More
+**Author**
+Simrit
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
