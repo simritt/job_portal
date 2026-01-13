@@ -22,7 +22,7 @@ async function getRecruiterJobs(): Promise<{ jobs: RecruiterJob[] }> {
     .map((c) => `${c.name}=${c.value}`)
     .join("; ")
 
-  const res = await fetch("http://localhost:3000/api/recruiter/jobs", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/recruiter/jobs`, {
     cache: "no-store",
     headers: {
       Cookie: cookieHeader,
