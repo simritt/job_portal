@@ -35,7 +35,7 @@ async function getApplicants(
     .join("; ")
 
   const res = await fetch(
-    `http://localhost:3000/api/jobs/${jobId}/applications`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/jobs/${jobId}/applications`,
     {
       cache: "no-store",
       headers: { Cookie: cookieHeader },

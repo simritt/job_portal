@@ -14,7 +14,7 @@ async function getRecruiterJobs() {
     .join("; ")
 
   const res = await fetch(
-    "http://localhost:3000/api/recruiter/jobs",
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/recruiter/jobs`,
     {
       cache: "no-store",
       headers: {
