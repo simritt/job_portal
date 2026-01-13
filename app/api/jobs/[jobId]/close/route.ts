@@ -1,13 +1,15 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { and, eq } from "drizzle-orm"
 import { db } from "@/db"
 import { jobs } from "@/db/schema/jobs"
 import { getSession } from "@/lib/auth"
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { jobId: string } }
+  req: NextRequest,
+  context: { params: { jobId: string } }
 ) {
+  const { jobId } = context.params
+
   try {
     const session = await getSession()
 
@@ -18,7 +20,7 @@ export async function PATCH(
       )
     }
 
-    const jobId = params.jobId
+    const { jobId } = context.params
 
     const job = await db
       .select()
