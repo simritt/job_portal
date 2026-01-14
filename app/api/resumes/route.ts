@@ -3,8 +3,7 @@ import { db } from "@/db"
 import { resumes } from "@/db/schema/resumes"
 import { getSession } from "@/lib/auth"
 import { eq } from "drizzle-orm"
-import path from "path"
-import fs from "fs/promises"
+import cloudinary from "@/lib/cloudinary"
 
 export async function POST(req: Request) {
   try {
@@ -24,17 +23,23 @@ export async function POST(req: Request) {
     }
 
     const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+const buffer = Buffer.from(bytes)
 
-    const uploadDir = path.join(process.cwd(), "public/uploads")
-    await fs.mkdir(uploadDir, { recursive: true })
+const uploadResult = await new Promise<any>((resolve, reject) => {
+  cloudinary.uploader.upload_stream(
+    {
+      folder: "resumes",
+      resource_type: "raw", // REQUIRED for PDFs
+    },
+    (error, result) => {
+      if (error) reject(error)
+      else resolve(result)
+    }
+  ).end(buffer)
+})
 
-    const safeFileName = `${crypto.randomUUID()}-${file.name}`
-    const filePath = path.join(uploadDir, safeFileName)
+const fileUrl = uploadResult.secure_url
 
-    await fs.writeFile(filePath, buffer)
-
-    const fileUrl = `/uploads/${safeFileName}`
 
     const [resume] = await db
       .insert(resumes)
