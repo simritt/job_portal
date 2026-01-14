@@ -1,7 +1,10 @@
 "use server";
 
 import { db } from "@/db";
-import { users, applicants, recruiters } from "@/db/schema";
+import { users } from "@/db/schema/users"
+import { applicantProfiles } from "@/db/schema/applicant_profiles"
+import { recruiterProfiles } from "@/db/schema/recruiter_profiles";
+import { companies } from "@/db/schema/companies";
 import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
 
@@ -40,18 +43,29 @@ export async function register(data: RegisterInput) {
         .returning();
 
       if (data.role === "APPLICANT") {
-        await tx.insert(applicants).values({
+        await tx.insert(applicantProfiles).values({
           userId: user.id,
-          resumeUrl: data.resumeUrl,
         });
       }
 
       if (data.role === "RECRUITER") {
-        await tx.insert(recruiters).values({
-          userId: user.id,
-          companyName: data.companyName,
-        });
-      }
+  if (!data.companyName) {
+    throw new Error("Company name required for recruiter registration")
+  }
+
+  const [company] = await tx
+    .insert(companies)
+    .values({
+      name: data.companyName,
+    })
+    .returning()
+
+  await tx.insert(recruiterProfiles).values({
+    userId: user.id,
+    companyId: company.id,
+  })
+}
+
     });
 
     return { success: true };
