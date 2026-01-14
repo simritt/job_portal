@@ -149,19 +149,17 @@ export default async function ApplicantDashboardPage({
                       initialSaved={job.isSaved}
                     />
 
-                    {job.applicationStatus ? (
-                      <div className="flex flex-col items-end gap-2">
-                        <StatusBadge status={job.applicationStatus} />
-                        {job.applicationStatus === "APPLIED" &&
-                          job.applicationId && (
-                            <WithdrawButton
-                              applicationId={job.applicationId}
-                            />
-                          )}
-                      </div>
-                    ) : (
-                      <ApplyButton jobId={job.id} />
-                    )}
+                    {job.applicationId ? (
+  <div className="flex flex-col items-end gap-2">
+    <StatusBadge status={job.applicationStatus ?? "APPLIED"} />
+    {job.applicationStatus === "APPLIED" && (
+      <WithdrawButton applicationId={job.applicationId} />
+    )}
+  </div>
+) : (
+  <ApplyButton jobId={job.id} />
+)}
+
                   </div>
                 </div>
               </CardContent>

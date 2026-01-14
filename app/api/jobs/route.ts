@@ -65,7 +65,13 @@ const rows: any[] = isRecruiter
       .from(jobs)
       .innerJoin(users, eq(jobs.recruiterId, users.id))
       .innerJoin(companies, eq(jobs.companyId, companies.id))
-      .leftJoin(jobApplications, eq(jobApplications.jobId, jobs.id))
+      .leftJoin(
+  jobApplications,
+  and(
+    eq(jobApplications.jobId, jobs.id),
+    eq(jobApplications.applicantId, applicantId!)
+  )
+)
       .leftJoin(
         savedJobs,
         and(
