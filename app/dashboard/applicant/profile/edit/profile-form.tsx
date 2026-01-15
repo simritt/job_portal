@@ -39,6 +39,9 @@ export default function EditProfileForm({ initialData }: Props) {
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
 
+  const MAX_AVATAR_SIZE = 1 * 1024 * 1024 // 1MB
+  const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"]
+
   const getInitials = (n: string) =>
     n
       .split(" ")
@@ -148,14 +151,32 @@ export default function EditProfileForm({ initialData }: Props) {
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={(e) =>
-                    e.target.files && handleAvatarUpload(e.target.files[0])
-                  }
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (!file) return
+
+                    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                      toast.error("Only JPG, PNG, or WEBP images are allowed")
+                      e.target.value = ""
+                      return
+                    }
+
+                    if (file.size > MAX_AVATAR_SIZE) {
+                      toast.error("Profile photo must be under 1MB")
+                      e.target.value = ""
+                      return
+                    }
+
+                    handleAvatarUpload(file)
+                  }}
                 />
               </label>
             </div>
             <p className="text-sm text-muted-foreground">
               Hover and click to upload a new photo
+            </p>
+            <p className="text-xs text-muted-foreground">
+              JPG / PNG / WEBP · Max size 1MB
             </p>
           </CardContent>
         </Card>

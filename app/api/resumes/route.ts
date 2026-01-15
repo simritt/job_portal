@@ -5,6 +5,14 @@ import { getSession } from "@/lib/auth"
 import { eq } from "drizzle-orm"
 import cloudinary from "@/lib/cloudinary"
 
+const MAX_RESUME_SIZE = 2 * 1024 * 1024 // 2MB
+
+const ALLOWED_TYPES = [
+  "application/pdf",
+  "application/msword", // .doc
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+]
+
 export async function POST(req: Request) {
   try {
     const session = await getSession()
@@ -21,6 +29,20 @@ export async function POST(req: Request) {
         { status: 400 }
       )
     }
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { message: "Invalid file type. Only PDF, DOC, DOCX allowed." },
+        { status: 400 }
+      )
+    }
+
+    if (file.size > MAX_RESUME_SIZE) {
+      return NextResponse.json(
+        { message: "Resume too large. Max size is 2MB." },
+        { status: 413 }
+      )
+    }
+
 
     const bytes = await file.arrayBuffer()
 const buffer = Buffer.from(bytes)

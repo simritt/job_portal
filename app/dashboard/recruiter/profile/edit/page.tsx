@@ -32,6 +32,8 @@ export default function RecruiterProfileEditPage() {
   const [showConfirm, setShowConfirm] = useState(false)
 
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  const MAX_AVATAR_SIZE = 1 * 1024 * 1024
+  const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"]
 
   // Helper: get initials from name
   function getInitials(fullName?: string) {
@@ -210,6 +212,19 @@ if (!profile) {
                         onChange={(e) => {
                           const file = e.target.files?.[0]
                           if (!file) return
+
+                          if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                            toast.error("Only JPG, PNG, or WEBP images are allowed")
+                            e.target.value = ""
+                            return
+                          }
+
+                          if (file.size > MAX_AVATAR_SIZE) {
+                            toast.error("Profile photo must be under 1MB")
+                            e.target.value = ""
+                            return
+                          }
+
                           handleAvatarUpload(file)
                         }}
                       />

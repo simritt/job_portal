@@ -28,6 +28,13 @@ export default function ResumeModal({ open, onClose, jobId }: Props) {
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const MAX_RESUME_SIZE = 2 * 1024 * 1024 // 2MB
+  const ALLOWED_TYPES = [
+    "application/pdf",
+    "application/msword", // .doc
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+  ]
+
   useEffect(() => {
     if (!open) return
 
@@ -53,10 +60,14 @@ export default function ResumeModal({ open, onClose, jobId }: Props) {
     setUploading(false)
 
     if (!res.ok) {
-      toast.error("Failed to upload resume")
+      if (res.status === 413) {
+        toast.error("Resume too large. Please upload a file under 2MB.")
+      } else {
+        toast.error("Failed to upload resume")
+      }
       return null
     }
-
+    
     const data = await res.json()
     return data.id
   }
@@ -122,8 +133,30 @@ export default function ResumeModal({ open, onClose, jobId }: Props) {
           <Label>Or upload new resume</Label>
           <Input type="file"
             accept=".pdf,.doc,.docx"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
+            onChange={(e) => {
+              const selectedFile = e.target.files?.[0]
+              if (!selectedFile) return
+
+              if (!ALLOWED_TYPES.includes(selectedFile.type)) {
+                toast.error("Only PDF, DOC, or DOCX files are allowed")
+                e.target.value = ""
+                return
+              }
+
+              if (selectedFile.size > MAX_RESUME_SIZE) {
+                toast.error("Resume must be under 2MB")
+                e.target.value = ""
+                return
+              }
+
+              setFile(selectedFile)
+            }}
+          />
+
+          <p className="text-xs text-muted-foreground mt-1">
+            PDF / DOC / DOCX · Max size 2MB
+          </p>
+
 
         </div>
 

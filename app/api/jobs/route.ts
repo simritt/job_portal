@@ -119,7 +119,7 @@ for (const row of rows) {
         ? row.applicationId
         : null,
       isSaved: row.isSaved ?? false,
-      skills: [], // 👈 important
+      skills: [], 
     })
   }
 
